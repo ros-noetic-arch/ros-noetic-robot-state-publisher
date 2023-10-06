@@ -7,7 +7,7 @@ pkgname='ros-noetic-robot-state-publisher'
 pkgver='1.15.2'
 _pkgver_patch=0
 arch=('i686' 'x86_64' 'aarch64' 'armv7h' 'armv6h')
-pkgrel=1
+pkgrel=2
 license=('BSD')
 
 ros_makedepends=(
@@ -50,8 +50,19 @@ depends=(
 )
 
 _dir="robot_state_publisher-${pkgver}/"
-source=("${pkgname}-${pkgver}.tar.gz"::"https://github.com/ros/robot_state_publisher/archive/${pkgver}.tar.gz")
-sha256sums=('15dd320a7409cd3542a9e78a18e103be54c5fa3cf467276085c804314014e521')
+source=(
+	"${pkgname}-${pkgver}.tar.gz"::"https://github.com/ros/robot_state_publisher/archive/${pkgver}.tar.gz"
+	"cxx_standard.patch"
+)
+sha256sums=(
+	'15dd320a7409cd3542a9e78a18e103be54c5fa3cf467276085c804314014e521'
+	'c4e32f947f4f6a17e82ef29f31a24ed50974c081d0573a97e2fbb3f589528406'
+)
+
+prepare() {
+	cd "${srcdir}/${_dir}"
+	patch -p1 -i "${srcdir}/cxx_standard.patch"
+}
 
 build() {
 	# Use ROS environment variables.
